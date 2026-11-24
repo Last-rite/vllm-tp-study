@@ -1,0 +1,12 @@
+{
+  "_comment": "Local smoke test on the RTX 4060 (8 GB) with a small model. Only checks that the pipeline works.",
+  "model": "Qwen/Qwen3-0.6B",
+  "dtype": "bfloat16",
+  "input_len": 128,
+  "output_len": 32,
+  "batches": [1, 4, 16],
+  "reps": 2,
+  "seed": 0,
+  "gpu_memory_utilization": 0.80,
+  "time_budget_s": 270
+}

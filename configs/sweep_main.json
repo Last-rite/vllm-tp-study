@@ -1,0 +1,12 @@
+{
+  "_comment": "Main TP sweep. Same file on every platform; TP, platform and ablation flags come from the command line.",
+  "model": "Qwen/Qwen3-8B",
+  "dtype": "bfloat16",
+  "input_len": 256,
+  "output_len": 128,
+  "batches": [1, 4, 8, 16, 32, 64],
+  "reps": 3,
+  "seed": 0,
+  "gpu_memory_utilization": 0.90,
+  "time_budget_s": 270
+}

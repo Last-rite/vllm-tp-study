@@ -1,0 +1,5 @@
+# Pin the SAME vLLM version on every platform. Fill in after the first install
+# on nano5 (see SETUP.md step N3), e.g. vllm==0.xx.y, then commit this file.
+vllm==FILL_ME
+pandas
+matplotlib

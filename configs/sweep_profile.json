@@ -1,0 +1,12 @@
+{
+  "_comment": "Short run for Nsight Systems profiling: two batch sizes, one repetition.",
+  "model": "Qwen/Qwen3-8B",
+  "dtype": "bfloat16",
+  "input_len": 256,
+  "output_len": 32,
+  "batches": [8, 32],
+  "reps": 1,
+  "seed": 0,
+  "gpu_memory_utilization": 0.90,
+  "time_budget_s": 200
+}

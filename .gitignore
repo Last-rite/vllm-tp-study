@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+results/nsys/*.nsys-rep
+results/nsys/*.sqlite
+results/raw/*.tmp.json
+*.log.tmp
+.env
