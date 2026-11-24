@@ -7,9 +7,9 @@ set -euo pipefail
 S="bash $(dirname "$0")/submit.sh"
 case "${1:-list}" in
   # ---- phase 0: checks (cheap) -------------------------------------------
-  N0)  $S 1 2 info ;;                                   # driver, GPU, torch/vllm, nsys   ~2 GPU-min max
-  N1)  $S 1 6 bench 1 smoke --batches 1,8 --reps 1 ;;   # 1st start: builds compile cache ~6
-  N2)  $S 2 6 bench 2 smoke --batches 1,8 --reps 1 ;;   # TP=2 start + cache          ~12
+  N0)  $S 2 2 info ;;                                   # driver, GPU, torch/vllm, nsys   ~2 GPU-min max
+  N1)  $S 1 6 bench 1 smoke --batches 1,64 --reps 1 ;;   # 1st start: builds compile cache ~6
+  N2)  $S 2 6 bench 2 smoke --batches 1,64 --reps 1 ;;   # TP=2 start + cache          ~12
   # ---- phase 1: communication --------------------------------------------
   N3)  $S 2 4 allreduce 2 ;;                            # all-reduce 1 KiB..256 MiB    ~8
   # ---- phase 2: main sweep (TP=1 vs TP=2), two independent runs each ----

@@ -8,6 +8,7 @@ set -uo pipefail
 cd "$(dirname "$0")/../.."
 source env/nano5.env.sh
 module load cuda/12.4 >/dev/null 2>&1 || true
+export PATH="$VENV/bin:$PATH"; hash -r
 export OMP_NUM_THREADS=2          # we only have 4 cores (-c4)
 export TOKENIZERS_PARALLELISM=false
 export HF_HUB_OFFLINE=1           # models are pre-downloaded; never download inside a job

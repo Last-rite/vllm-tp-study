@@ -1,5 +1,10 @@
-# Pin the SAME vLLM version on every platform. Fill in after the first install
-# on nano5 (see SETUP.md step N3), e.g. vllm==0.xx.y, then commit this file.
-vllm==0.34.0
+# nano5 driver is 550 (CUDA 12.4), so use the last vLLM release with CUDA 12.x binaries (0.32.0, cu129):
+#   pip install uv
+#   export VLLM_VERSION=0.32.0 CUDA_VARIANT=cu129
+#   uv pip install --no-cache "vllm==${VLLM_VERSION}" \
+#       --extra-index-url "https://wheels.vllm.ai/${VLLM_VERSION}/${CUDA_VARIANT}" \
+#       --torch-backend=${CUDA_VARIANT}
+# Resulting build: vllm 0.32.0+cu129, torch 2.13.0+cu129
+vllm==0.32.0
 pandas
 matplotlib
