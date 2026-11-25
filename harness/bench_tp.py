@@ -28,6 +28,11 @@ import socket
 import sys
 import time
 
+# Same sampler on every platform: FlashInfer's sampler is JIT-compiled with the
+# system nvcc, and nano5's cuda/12.4 nvcc rejects its flags ("--compress-mode").
+# The PyTorch-native sampler is used everywhere (greedy decoding, negligible cost).
+os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
+
 T_START = time.perf_counter()
 
 
@@ -186,6 +191,7 @@ def main():
                       for i in range(torch.cuda.device_count())],
         "host": socket.gethostname(), "python": pyplatform.python_version(),
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
+        "flashinfer_sampler": os.environ.get("VLLM_USE_FLASHINFER_SAMPLER"),
         "hf_config": {k: hf.get(k) for k in (
             "hidden_size", "num_hidden_layers", "num_attention_heads",
             "num_key_value_heads", "head_dim", "intermediate_size",
