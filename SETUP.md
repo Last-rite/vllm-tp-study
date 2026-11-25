@@ -49,18 +49,19 @@ git branch -M main && git push -u origin main
 
 ### L3. Python 環境
 
+版本固定為 **vLLM 0.32.0（CUDA 12.9 版）**。不要直接 `pip install vllm`：PyPI 上最新版是 CUDA 13 的 wheel，需要 R580 以上驅動，nano5 的驅動是 550（CUDA 12.4），裝了也跑不起來。
+
 ```bash
 cd ~/vllm-tp-study
 source env/local.env.sh
 python3 -m venv "$VENV" && source "$VENV/bin/activate"
-pip install -U pip
-pip install vllm pandas matplotlib     # 約 5–10 分鐘
-python -c "import vllm, torch; print(vllm.__version__, torch.__version__, torch.cuda.is_available())"
-# 預期：印出版本，最後是 True
+pip install -U pip uv
+uv pip install --no-cache "vllm==0.32.0" --extra-index-url https://wheels.vllm.ai/0.32.0/cu129 --torch-backend=cu129
+uv pip install pandas matplotlib
+python -c "from importlib.metadata import version as v; print('torch', v('torch'), 'vllm', v('vllm'))"
+# 預期：torch 2.13.0+cu129 vllm 0.32.0+cu129（本機 4060 的驅動需支援 CUDA 12.9，否則只能測 import）
+du -sh "$STORE"                        # 預期：約 10–12 GB
 ```
-
-**版本要統一：** nano5 裝好之後（N3），以那邊的 vLLM 版本為準。若版本不同，本機執行
-`pip install vllm==<nano5 的版本>` 對齊。
 
 ### L4. 本機 smoke test
 
@@ -116,21 +117,58 @@ git clone https://github.com/<你的帳號>/vllm-tp-study.git ~/vllm-tp-study
 cd ~/vllm-tp-study
 ```
 
-### N3. 安裝環境（在登入節點，約 10 分鐘）
+### N3. 安裝環境（在登入節點，約 10–60 分鐘）
+
+**重點（踩過的坑）：**
+
+1. nano5 驅動是 550.127.08（CUDA 12.4），所以要裝 CUDA 12.9 版的 wheel（vLLM 0.32.0 是最後一個提供 cu129 的版本）。已驗證 H100 可以正常初始化。
+2. **計算節點的系統 Python 只有 3.6**，登入節點才有 3.11。用系統 `python3 -m venv` 建的 venv，在登入節點能跑、在 srun 作業裡會用到 3.6 而失敗（`No module named 'importlib.metadata'`）。所以 venv 必須用放在 `$STORE` 的獨立 Python（uv 管理），兩種節點才會用同一份。
+3. 登入節點不要執行 GPU 程式；檢查版本只用 `importlib.metadata`，不要 `import vllm`。
 
 ```bash
 tmux new -s setup                      # 避免 SSH 斷線中斷安裝
 cd ~/vllm-tp-study
 source env/nano5.env.sh                # 會建立 ~/vtp-store 下的各個資料夾
-python3 -m venv "$VENV" && source "$VENV/bin/activate"
-pip install -U pip
-pip install vllm pandas
-pip cache purge                        # 釋放空間
-python -c "import vllm; print(vllm.__version__)"   # 只 import、不使用 GPU
-du -sh "$STORE"                        # 預期：約 10–12 GB
+pip install -U uv                      # 若系統沒有 uv，先用使用者安裝：pip install --user uv
+
+# (a) 獨立 Python 3.11，放在 $STORE（不要用系統 python3）
+export UV_PYTHON_INSTALL_DIR="$STORE/python"
+uv python install 3.11
+PYBIN=$(ls "$STORE"/python/*/bin/python3.11 | head -1)
+"$PYBIN" -V
+
+# (b) 用這個 Python 建 venv，安裝固定版本
+"$PYBIN" -m venv "$VENV" && source "$VENV/bin/activate"
+uv pip install --no-cache "vllm==0.32.0" --extra-index-url https://wheels.vllm.ai/0.32.0/cu129 --torch-backend=cu129
+uv pip install pandas matplotlib
+du -sh "$STORE"                        # 預期：約 11–12 GB
 ```
 
-把印出的版本寫進 `env/requirements.txt`（把 `vllm==FILL_ME` 改成 `vllm==<版本>`），然後 commit。本機與 server1 都改裝這個版本。
+**如果 venv 已經用系統 Python 建好了**（我們的情況），不用重裝，直接改接連結即可：
+
+```bash
+export UV_PYTHON_INSTALL_DIR="$STORE/python"
+uv python install 3.11
+PYBIN=$(ls "$STORE"/python/*/bin/python3.11 | head -1)
+ln -sfn "$PYBIN" "$VENV/bin/python3.11"
+ln -sfn python3.11 "$VENV/bin/python3"
+ln -sfn python3 "$VENV/bin/python"
+sed -i "s|^home = .*|home = $(dirname "$PYBIN")|" "$VENV/pyvenv.cfg"
+```
+
+**驗證（兩個節點都要通過）：**
+
+```bash
+# 登入節點（只讀套件資訊，不碰 GPU）
+"$VENV/bin/python" -c "import sys; print(sys.version.split()[0]); from importlib.metadata import version as v; print('torch', v('torch'), 'vllm', v('vllm'))"
+# 計算節點（約 1 GPU 分鐘）
+srun -A $SLURM_ACCT -p dev -N1 -n1 -c4 --gpus-per-node=1 -t 00:01:00 bash -c '
+source env/nano5.env.sh
+readlink -f "$VENV/bin/python"
+"$VENV/bin/python" -c "import sys; print(sys.version.split()[0]); import torch; print(torch.__version__, torch.cuda.is_available())"'
+```
+
+預期：兩邊都是 Python 3.11.x、`torch 2.13.0+cu129 vllm 0.32.0+cu129`，計算節點最後印出 `True`。
 
 ### N4. 下載模型（在登入節點，約 16 GB）
 
@@ -203,8 +241,12 @@ ssh <帳號>@<server1 位址>
 tmux new -s vtp
 git clone https://github.com/<你的帳號>/vllm-tp-study.git ~/vllm-tp-study && cd ~/vllm-tp-study
 source env/server1.env.sh              # 大檔放 /tmp2/$USER/vtp-store
-python3 -m venv "$VENV" && source "$VENV/bin/activate"
-pip install -U pip && pip install "vllm==<與 nano5 相同>" pandas
+python3 -m venv "$VENV" && source "$VENV/bin/activate"   # server1 是單機；若系統 Python < 3.10，改用 uv python install 3.11（同 N3）
+pip install -U pip uv
+nvidia-smi | head -4                   # 先記下驅動/CUDA 版本；不要升級驅動
+uv pip install --no-cache "vllm==0.32.0" --extra-index-url https://wheels.vllm.ai/0.32.0/cu129 --torch-backend=cu129
+uv pip install pandas matplotlib
+python -c "from importlib.metadata import version as v; print('torch', v('torch'), 'vllm', v('vllm'))"
 hf download Qwen/Qwen3-8B --local-dir "$HF_HOME/models/Qwen3-8B"
 which nsys || echo "no nsys (profile 步驟會失敗，可略過)"
 ```
