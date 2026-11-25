@@ -33,6 +33,17 @@ import time
 # The PyTorch-native sampler is used everywhere (greedy decoding, negligible cost).
 os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
 
+# Communication path under study (identical on every platform):
+#   * FlashInfer all-reduce and the torch symmetric-memory all-reduce are turned
+#     off, so TP all-reduce dispatches to vLLM's CUSTOM kernel, falling back to
+#     NCCL (PYNCCL); --disable-custom-all-reduce leaves pure NCCL.
+#   * The compile-time "allreduce + RMSNorm" fusion is turned off (in LLM() below),
+#     so every all-reduce stays a separate, measurable operation.
+# Besides being cleaner for the study, FlashInfer's all-reduce kernels must be
+# JIT-compiled and nano5's nvcc 12.4 cannot build them.
+os.environ.setdefault("VLLM_ALLREDUCE_USE_FLASHINFER", "0")
+os.environ.setdefault("VLLM_ALLREDUCE_USE_SYMM_MEM", "0")
+
 T_START = time.perf_counter()
 
 
@@ -165,6 +176,7 @@ def main():
         disable_custom_all_reduce=args.disable_custom_all_reduce,
         seed=seed,
         trust_remote_code=False,
+        compilation_config={"pass_config": {"fuse_allreduce_rms": False}},
     )
     init_s = time.perf_counter() - t0
     log(f"engine ready in {init_s:.1f}s")
@@ -192,6 +204,9 @@ def main():
         "host": socket.gethostname(), "python": pyplatform.python_version(),
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
         "flashinfer_sampler": os.environ.get("VLLM_USE_FLASHINFER_SAMPLER"),
+        "allreduce_use_flashinfer": os.environ.get("VLLM_ALLREDUCE_USE_FLASHINFER"),
+        "allreduce_use_symm_mem": os.environ.get("VLLM_ALLREDUCE_USE_SYMM_MEM"),
+        "fuse_allreduce_rms": False,
         "hf_config": {k: hf.get(k) for k in (
             "hidden_size", "num_hidden_layers", "num_attention_heads",
             "num_key_value_heads", "head_dim", "intermediate_size",
