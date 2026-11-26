@@ -202,6 +202,8 @@ def main():
         "gpu_names": [torch.cuda.get_device_name(i)
                       for i in range(torch.cuda.device_count())],
         "host": socket.gethostname(), "python": pyplatform.python_version(),
+        "step": os.environ.get("VTP_STEP"), "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+        "git_commit": os.environ.get("VTP_GIT"), "log": os.environ.get("VTP_LOG"),
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
         "flashinfer_sampler": os.environ.get("VLLM_USE_FLASHINFER_SAMPLER"),
         "allreduce_use_flashinfer": os.environ.get("VLLM_ALLREDUCE_USE_FLASHINFER"),

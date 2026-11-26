@@ -5,6 +5,7 @@
 #   bash scripts/nano5/steps.sh list
 set -euo pipefail
 S="bash $(dirname "$0")/submit.sh"
+export VTP_STEP="${1:-adhoc}"   # step id goes into job name, log name, ledger and .meta.json
 case "${1:-list}" in
   # ---- phase 0: checks (cheap) -------------------------------------------
   N0)  $S 2 2 info ;;                                   # driver, GPU, torch/vllm, nsys   ~2 GPU-min max

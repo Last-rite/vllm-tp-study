@@ -14,9 +14,21 @@ export HF_HUB_OFFLINE=1           # models are pre-downloaded; never download in
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 MODEL="${MODEL:-$HF_HOME/models/Qwen3-8B}"
-LOG=results/logs/nano5_$(date +%Y%m%d-%H%M%S)_${SLURM_JOB_ID:-nojob}_$1.log
+# Log name says which experiment it is:
+#   nano5_<step>_<what>_<YYYYmmdd-HHMMSS>_<jobid>.log
+#   e.g. nano5_N5_bench-tp2-main_20261126-181226_502579.log
+export VTP_STEP="${VTP_STEP:-adhoc}"
+case "$1" in
+  bench|profile) WHAT="$1-tp${2:-?}-${3:-?}" ;;
+  allreduce)     WHAT="allreduce-p${2:-?}" ;;
+  *)             WHAT="$1" ;;
+esac
+export VTP_GIT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)$(git diff --quiet 2>/dev/null || echo -dirty)"
+LOG=results/logs/nano5_${VTP_STEP}_${WHAT}_$(date +%Y%m%d-%H%M%S)_${SLURM_JOB_ID:-nojob}.log
+export VTP_LOG="$LOG"
 mkdir -p results/logs
 exec > >(tee -a "$LOG") 2>&1
+echo "== step ${VTP_STEP}  experiment ${WHAT}  git ${VTP_GIT}"
 echo "== job ${SLURM_JOB_ID:-?} on $(hostname) at $(date)  args: $*"
 nvidia-smi --query-gpu=index,name,driver_version,memory.used,memory.total,utilization.gpu --format=csv
 

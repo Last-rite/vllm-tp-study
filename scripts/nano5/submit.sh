@@ -15,10 +15,13 @@ if [ "$RUNNING" -ge 2 ]; then
 fi
 mkdir -p results/logs
 LEDGER=results/logs/su_ledger.csv
-[ -f "$LEDGER" ] || echo "submitted_at,user,ngpus,minutes_limit,max_gpu_min,args" > "$LEDGER"
-echo "$(date -Iseconds),$USER,$G,$M,$((G*M)),\"$*\"" >> "$LEDGER"
+STEP="${VTP_STEP:-adhoc}"
+[ -f "$LEDGER" ] || echo "submitted_at,user,ngpus,minutes_limit,max_gpu_min,args,step" > "$LEDGER"
+head -1 "$LEDGER" | grep -q ',step$' || sed -i '1s/$/,step/' "$LEDGER"
+echo "$(date -Iseconds),$USER,$G,$M,$((G*M)),\"$*\",$STEP" >> "$LEDGER"
+export VTP_STEP="$STEP"
 CMD=(srun -A "$SLURM_ACCT" -p dev -N1 -n1 -c4 --gpus-per-node="$G" -t "00:0$M:00"
-     -J "vtp-$1" bash scripts/nano5/job.sh "$@")
+     -J "vtp-$STEP" bash scripts/nano5/job.sh "$@")
 echo ">> ${CMD[*]}"
 "${CMD[@]}" || echo ">> job returned non-zero (see results/logs/)"
 echo ">> finished. Remaining wallet:"

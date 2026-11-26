@@ -110,6 +110,8 @@ def main():
             "gpu_names": [torch.cuda.get_device_name(i) for i in range(world)],
             "torch": torch.__version__, "nccl": ".".join(map(str, torch.cuda.nccl.version())),
             "host": socket.gethostname(), "wall_s": time.time() - t0,
+            "step": os.environ.get("VTP_STEP"), "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+            "git_commit": os.environ.get("VTP_GIT"), "log": os.environ.get("VTP_LOG"),
             "env": {k: v for k, v in os.environ.items() if k.startswith("NCCL_")}}
     with open(base + ".meta.json", "w") as f:
         json.dump(meta, f, indent=2)
