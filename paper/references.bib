@@ -1,0 +1,135 @@
+% PPoPP 規定：參考文獻必須
+%   (1) 列出所有作者（不可用 "and others" / et al.）
+%   (2) 寫明出版年份與會議/期刊名稱（不能只給 DOI 連結）
+% 作者名單已對照 USENIX / MLSys / arXiv 頁面確認：distserve、pope2023。
+% 其餘條目依已知書目資料整理，投稿前請逐筆用 DBLP (https://dblp.org) 核對頁碼與 DOI。
+
+@inproceedings{kwon2023pagedattention,
+  author    = {Woosuk Kwon and Zhuohan Li and Siyuan Zhuang and Ying Sheng and
+               Lianmin Zheng and Cody Hao Yu and Joseph E. Gonzalez and Hao Zhang and
+               Ion Stoica},
+  title     = {Efficient Memory Management for Large Language Model Serving with
+               {PagedAttention}},
+  booktitle = {Proceedings of the 29th ACM Symposium on Operating Systems Principles
+               (SOSP '23)},
+  year      = {2023},
+  pages     = {611--626},
+  publisher = {ACM},
+  doi       = {10.1145/3600006.3613165},
+}
+
+@inproceedings{yu2022orca,
+  author    = {Gyeong-In Yu and Joo Seong Jeong and Geon-Woo Kim and Soojeong Kim and
+               Byung-Gon Chun},
+  title     = {Orca: A Distributed Serving System for Transformer-Based Generative
+               Models},
+  booktitle = {16th USENIX Symposium on Operating Systems Design and Implementation
+               (OSDI '22)},
+  year      = {2022},
+  pages     = {521--538},
+  publisher = {USENIX Association},
+}
+
+@inproceedings{agrawal2024sarathi,
+  author    = {Amey Agrawal and Nitin Kedia and Ashish Panwar and Jayashree Mohan and
+               Nipun Kwatra and Bhargav S. Gulavani and Alexey Tumanov and
+               Ramachandran Ramjee},
+  title     = {Taming Throughput-Latency Tradeoff in {LLM} Inference with
+               {Sarathi-Serve}},
+  booktitle = {18th USENIX Symposium on Operating Systems Design and Implementation
+               (OSDI '24)},
+  year      = {2024},
+  publisher = {USENIX Association},
+}
+
+@inproceedings{zhong2024distserve,
+  author    = {Yinmin Zhong and Shengyu Liu and Junda Chen and Jianbo Hu and Yibo Zhu and
+               Xuanzhe Liu and Xin Jin and Hao Zhang},
+  title     = {{DistServe}: Disaggregating Prefill and Decoding for Goodput-optimized
+               Large Language Model Serving},
+  booktitle = {18th USENIX Symposium on Operating Systems Design and Implementation
+               (OSDI '24)},
+  year      = {2024},
+  publisher = {USENIX Association},
+}
+
+@inproceedings{dao2022flashattention,
+  author    = {Tri Dao and Daniel Y. Fu and Stefano Ermon and Atri Rudra and
+               Christopher R{\'e}},
+  title     = {{FlashAttention}: Fast and Memory-Efficient Exact Attention with
+               {IO}-Awareness},
+  booktitle = {Advances in Neural Information Processing Systems 35 (NeurIPS 2022)},
+  year      = {2022},
+}
+
+@inproceedings{dao2024flashattention2,
+  author    = {Tri Dao},
+  title     = {{FlashAttention-2}: Faster Attention with Better Parallelism and Work
+               Partitioning},
+  booktitle = {The Twelfth International Conference on Learning Representations
+               (ICLR 2024)},
+  year      = {2024},
+}
+
+@misc{shoeybi2019megatron,
+  author       = {Mohammad Shoeybi and Mostofa Patwary and Raul Puri and Patrick LeGresley
+                  and Jared Casper and Bryan Catanzaro},
+  title        = {{Megatron-LM}: Training Multi-Billion Parameter Language Models Using
+                  Model Parallelism},
+  year         = {2019},
+  howpublished = {arXiv preprint arXiv:1909.08053},
+}
+
+@inproceedings{narayanan2021efficient,
+  author    = {Deepak Narayanan and Mohammad Shoeybi and Jared Casper and
+               Patrick LeGresley and Mostofa Patwary and Vijay Korthikanti and
+               Dmitri Vainbrand and Prethvi Kashinkunti and Julie Bernauer and
+               Bryan Catanzaro and Amar Phanishayee and Matei Zaharia},
+  title     = {Efficient Large-Scale Language Model Training on {GPU} Clusters Using
+               {Megatron-LM}},
+  booktitle = {Proceedings of the International Conference for High Performance
+               Computing, Networking, Storage and Analysis (SC '21)},
+  year      = {2021},
+  publisher = {ACM},
+}
+
+@inproceedings{pope2023efficiently,
+  author    = {Reiner Pope and Sholto Douglas and Aakanksha Chowdhery and Jacob Devlin and
+               James Bradbury and Jonathan Heek and Kefan Xiao and Shivani Agrawal and
+               Jeff Dean},
+  title     = {Efficiently Scaling Transformer Inference},
+  booktitle = {Proceedings of Machine Learning and Systems 5 (MLSys 2023)},
+  year      = {2023},
+}
+
+@article{williams2009roofline,
+  author    = {Samuel Williams and Andrew Waterman and David Patterson},
+  title     = {Roofline: An Insightful Visual Performance Model for Multicore
+               Architectures},
+  journal   = {Communications of the ACM},
+  volume    = {52},
+  number    = {4},
+  pages     = {65--76},
+  year      = {2009},
+  doi       = {10.1145/1498765.1498785},
+}
+
+@article{hockney1994communication,
+  author    = {Roger W. Hockney},
+  title     = {The Communication Challenge for {MPP}: {Intel} {Paragon} and {Meiko} {CS-2}},
+  journal   = {Parallel Computing},
+  volume    = {20},
+  number    = {3},
+  pages     = {389--398},
+  year      = {1994},
+}
+
+@article{thakur2005optimization,
+  author    = {Rajeev Thakur and Rolf Rabenseifner and William Gropp},
+  title     = {Optimization of Collective Communication Operations in {MPICH}},
+  journal   = {International Journal of High Performance Computing Applications},
+  volume    = {19},
+  number    = {1},
+  pages     = {49--66},
+  year      = {2005},
+}

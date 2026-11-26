@@ -1,0 +1,22 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We measured tensor-parallel inference in \vllm on NVLink-connected H100 and PCIe-connected
+RTX~4090 GPUs, and explained the results with a communication-aware analytical model.
+\todo{Three findings with numbers: (1) TP=2 efficiency on NVLink vs.\ PCIe;
+(2) communication share and the effect of custom all-reduce / CUDA graphs;
+(3) model MAPE.}
+
+\paragraph{Limitations.}
+The H100 cluster allows at most two GPUs per job, so we could not test NVLink scaling
+beyond $p=2$.
+Storage and time limits restricted us to one 8B model.
+The RTX~4090 server is shared, so other users may add noise, although we used only idle
+GPUs and recorded GPU usage before each run.
+We used one engine version and offline batches; online serving with request arrivals,
+and multi-node setups, are not covered.
+
+\paragraph{Future work.}
+Natural extensions are pipeline and expert parallelism for larger or mixture-of-experts
+models, multi-node runs, and using the model to choose TP degree and batch size
+automatically.

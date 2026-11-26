@@ -1,0 +1,42 @@
+\section{Background and Motivation}
+\label{sec:background}
+
+\subsection{LLM Inference in vLLM}
+A decoder-only Transformer with $L$ layers and hidden size $h$ generates text
+autoregressively.
+For a batch of $B$ requests with prompt length $I$, the prefill step processes $B\cdot I$
+tokens in one forward pass.
+Each following decode step processes $B$ tokens, one per request, and appends their keys
+and values to the KV cache.
+\vllm~\cite{kwon2023pagedattention} stores the KV cache in fixed-size blocks
+(PagedAttention), which lets it pack many requests into GPU memory.
+Its scheduler forms a new batch at every iteration (continuous
+batching~\cite{yu2022orca}), and it can split long prefills into chunks that share a step
+with decodes~\cite{agrawal2024sarathi}.
+To reduce CPU launch overhead, \vllm captures the decode step as a CUDA graph and replays
+it.
+We use \vllm's offline engine so that all requests in a batch start together; this
+isolates the GPU-side behavior from request arrival patterns.
+
+\subsection{Tensor Parallelism}
+Megatron-style TP~\cite{shoeybi2019megatron,narayanan2021efficient} partitions each layer
+across $p$ GPUs.
+In attention, each GPU holds $1/p$ of the heads.
+In the MLP, the first projection is split by columns and the second by rows.
+Each GPU then holds a partial sum of the layer output, and one all-reduce of a $B\times h$
+activation (per decode step) restores the full result.
+This happens once after attention and once after the MLP, so a step performs $2L$
+all-reduces.
+Every all-reduce is also a synchronization point: the slowest GPU sets the pace.
+\vllm uses NCCL for collectives, and for small messages on GPUs with peer-to-peer access it
+switches to its own one-shot or two-shot custom all-reduce kernel.
+
+\subsection{Why the Interconnect Matters}
+\todo{One paragraph with the measured numbers from Fig.~\ref{fig:allreduce}: the H100 and
+RTX~4090 all-reduce bandwidth and latency, and whether the RTX~4090s have peer-to-peer
+access (record \texttt{nvidia-smi topo -m}).}
+Decode messages are small: for an 8B model with $h=4096$ in BF16, a batch of 32 produces a
+256\,KB message.
+In this range, all-reduce time is dominated by latency rather than bandwidth, so the
+fixed cost per call, multiplied by $2L$ calls per step, can be a large fraction of a
+decode step that takes only a few milliseconds.

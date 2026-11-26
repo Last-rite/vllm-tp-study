@@ -1,0 +1,126 @@
+\section{Evaluation}
+\label{sec:eval}
+
+\subsection{Experimental Setup}
+Table~\ref{tab:setup} lists the platforms.
+We use Qwen3-8B~\footnote{\url{https://huggingface.co/Qwen/Qwen3-8B}} in BF16
+(36 layers, $h=4096$, 32 query and 8 KV heads), the same \vllm version on both platforms,
+prompts of $I=256$ tokens, and $O=128$ output tokens.
+We sweep $B\in\{1,4,8,16,32,64\}$.
+Each configuration is repeated three times within a job, after warm-up, and main
+configurations are run in two separate jobs; we report medians and standard deviations.
+Batches that do not fit in the KV cache are skipped and noted.
+On the shared RTX~4090 server we record GPU usage before each run and use only idle GPUs.
+
+% 表格請用 booktabs；表格內文字不可小於 8pt（勿用 \tiny、\scriptsize）
+\begin{table}[t]
+  \caption{Experimental platforms. Both use vLLM \tbd, PyTorch \tbd and NCCL \tbd.
+    \todo{fill from results/*.meta.json.}}
+  \label{tab:setup}
+  \begin{tabular}{lll}
+    \toprule
+                 & H100 cluster      & RTX 4090 server \\
+    \midrule
+    GPU memory   & 80\,GB HBM3       & 24\,GB GDDR6X \\
+    GPUs used    & 1--2              & 1--4 \\
+    Interconnect & NVLink            & PCIe (P2P: \tbd) \\
+    CPU          & Xeon 8480, 4 cores & Xeon Gold 5118 \\
+    Driver       & \tbd              & \tbd \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{All-Reduce Performance}
+\begin{figure}[t]
+  \centering
+  \maybefig{allreduce_bw}
+  \caption{All-reduce bus bandwidth versus message size (higher is better).}
+  \Description{Log-log plot of all-reduce bus bandwidth against message size for H100 with
+    two GPUs and RTX 4090 with two and four GPUs.}
+  \label{fig:allreduce}
+\end{figure}
+Figure~\ref{fig:allreduce} shows \todo{describe: small-message latency $\alpha_p$ and
+peak bandwidth $\beta_p$ per platform (Table~\ref{tab:model}); ratio between NVLink and
+PCIe; message range used by decode.}
+
+\subsection{Strong Scaling}
+\begin{figure}[t]
+  \centering
+  \maybefig{strong_scaling}
+  \caption{Strong scaling of decode at batch 32: speedup (left) and parallel efficiency
+    $E(p)=S(p)/p$ (right). Error bars show one standard deviation.}
+  \Description{Decode speedup and efficiency versus TP degree for H100 and RTX 4090.}
+  \label{fig:strong}
+\end{figure}
+We fix the batch at $B=32$ and increase $p$.
+Speedup is $S(p) = \mathit{TPOT}(1)/\mathit{TPOT}(p)$.
+\todo{Fig.~\ref{fig:strong}: report $S(2)$ on both platforms and $S(4)$ on RTX~4090;
+explain the gap with the communication share; state prefill speedups in one sentence.}
+
+\subsection{Weak Scaling}
+\begin{figure}[t]
+  \centering
+  \maybefig{weak_scaling}
+  \caption{Weak scaling: decode step time when the batch grows with the number of GPUs
+    ($B=8p$). Flat is ideal.}
+  \Description{Time per output token versus TP degree with batch proportional to p.}
+  \label{fig:weak}
+\end{figure}
+Here the batch grows with the GPU count ($B=8p$), so ideal weak scaling keeps the step time
+flat.
+\todo{Fig.~\ref{fig:weak}: describe; compare TP with the DP-replica estimate.}
+
+\subsection{Where Does the Time Go?}
+\begin{figure}[t]
+  \centering
+  \maybefig{kernel_breakdown}
+  \caption{Share of GPU kernel time per category, from Nsight Systems.}
+  \Description{Stacked horizontal bars of GEMM, attention, communication and other kernel
+    time for each platform and TP degree.}
+  \label{fig:breakdown}
+\end{figure}
+\todo{Fig.~\ref{fig:breakdown}: communication share at TP=2 (H100 vs.\ RTX~4090) and TP=4;
+mention idle gaps visible in the timeline if any.}
+
+\subsection{Ablation: Custom All-Reduce and CUDA Graphs}
+\begin{table}[t]
+  \caption{Decode step time (ms) at batch 32 with each feature disabled; the ratio to the
+    default configuration is in parentheses.}
+  \label{tab:ablation}
+  \maybetab{tab_ablation}
+\end{table}
+\todo{Table~\ref{tab:ablation}: effect of each feature; does custom all-reduce matter more
+on NVLink or PCIe? Is it enabled at all without P2P? Does eager mode hurt TP more than TP=1?}
+
+\subsection{Model Validation}
+\begin{figure}[t]
+  \centering
+  \maybefig{model_vs_measured}
+  \caption{Predicted versus measured step time. Hollow markers: TP=1 calibration points;
+    filled markers: TP$>$1 predictions. The dotted line is $y=x$.}
+  \Description{Scatter plot of predicted against measured step time on log axes.}
+  \label{fig:model}
+\end{figure}
+\begin{table}[t]
+  \caption{Fitted model parameters and prediction error. \todo{fill from
+    results/model\_params.json.}}
+  \label{tab:model}
+  \begin{tabular}{lrr}
+    \toprule
+    Parameter & H100 & RTX 4090 \\
+    \midrule
+    $\eta_c$ (prefill, TP=1)        & \tbd & \tbd \\
+    $\eta_m$ (decode, TP=1)         & \tbd & \tbd \\
+    $\alpha_2$ ($\mu$s)            & \tbd & \tbd \\
+    $\beta_2$ (GB/s)               & \tbd & \tbd \\
+    MAPE, decode TP$>$1 (\%)       & \tbd & \tbd \\
+    MAPE, prefill TP$>$1 (\%)      & \tbd & \tbd \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\todo{Fig.~\ref{fig:model} and Table~\ref{tab:model}: overall MAPE; where the model is
+worst and why (overlap, launch overhead, custom all-reduce faster than NCCL fit).}
+
+\subsection{Discussion}
+\todo{Practical guidance in 3--4 sentences: when TP helps on PCIe, when DP replicas are
+better, and how to use the model to decide.}

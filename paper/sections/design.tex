@@ -1,0 +1,73 @@
+\section{Methodology}
+\label{sec:design}
+
+\subsection{Parallelization Strategy and Decomposition}
+We study two ways of using $p$ GPUs.
+\emph{Tensor parallelism} (TP) splits one model replica across the GPUs, as described in
+\S\ref{sec:background}; it reduces the work and the weight traffic per GPU but adds $2L$
+all-reduces per step.
+\emph{Data-parallel replicas} (DP) run $p$ independent copies of the model, each serving
+$B/p$ requests, with no communication.
+Because replicas share nothing, we compute DP throughput as $p$ times the single-GPU
+throughput at batch $B/p$, rather than running it separately.
+We do not use pipeline parallelism: the model fits on one GPU, and pipeline stages would
+add bubbles without reducing per-token latency.
+
+\subsection{Communication and Synchronization}
+We measure all-reduce time directly with a microbenchmark that uses the same NCCL library as
+\vllm (\texttt{torch.distributed}), for messages from 1\,KB to 256\,MB.
+We report bus bandwidth, $\mathit{busbw} = \frac{n}{t}\cdot\frac{2(p-1)}{p}$, the same
+definition as \texttt{nccl-tests}.
+To expose synchronization and launch overheads we ablate two \vllm features:
+(i) the custom all-reduce kernel, replaced by plain NCCL, and
+(ii) CUDA graphs, disabled with eager execution.
+
+\subsection{Analytical Performance Model}
+We model the time of one step as
+\begin{equation}
+  T_{\mathrm{step}} = \max\left(T_{\mathrm{comp}},\, T_{\mathrm{mem}}\right) + T_{\mathrm{comm}} .
+  \label{eq:step}
+\end{equation}
+For $N$ tokens in the step ($N=B$ for decode, $N=B\cdot I$ for prefill), with $P$ matrix
+parameters, $W$ weight bytes and $K$ bytes of KV cache read,
+\begin{equation}
+  T_{\mathrm{comp}} = \frac{2PN}{p\,F\,\eta_c}, \qquad
+  T_{\mathrm{mem}} = \frac{W + K}{p\,M\,\eta_m},
+  \label{eq:compmem}
+\end{equation}
+where $F$ and $M$ are the peak BF16 throughput and memory bandwidth of one GPU, and
+$\eta_c,\eta_m$ are efficiency factors.
+The communication term is
+\begin{equation}
+  T_{\mathrm{comm}} = 2L\left[\alpha_p + \frac{2(p-1)}{p}\cdot\frac{N h s}{\beta_p}\right],
+  \label{eq:comm}
+\end{equation}
+with $s$ bytes per element and per-platform latency $\alpha_p$ and bus bandwidth
+$\beta_p$.
+
+\paragraph{Calibration and validation.}
+We fit $\alpha_p$ and $\beta_p$ only from the all-reduce microbenchmark, never from \vllm
+runs, to avoid circular validation.
+We fit $\eta_c$ from TP=1 prefill and $\eta_m$ from TP=1 decode at small batch.
+All TP$>$1 points are then \emph{predictions}, and we report their mean absolute
+percentage error (MAPE) separately from the calibration set.
+The model assumes that communication does not overlap with computation, so it is an upper
+bound on step time when overlap exists.
+
+\subsection{Benchmark Harness}
+Our harness runs one configuration (model, $p$, engine options) per process.
+For each batch size it times a run with one output token (prefill) and a run with $O$
+output tokens; the decode step time is
+$\mathit{TPOT} = (t_{O} - t_{1})/(O-1)$.
+All requests use random token prompts of fixed length and generate exactly $O$ tokens
+(end-of-sequence is ignored), and prefix caching is disabled so repetitions do not reuse
+cached prompts.
+
+\paragraph{Working under cluster limits.}
+The H100 cluster allows jobs of at most 6 minutes, 2 GPUs and 4 CPU cores, with a
+per-student budget of about 8 GPU-hours.
+The harness therefore (i) keeps the compilation and CUDA-graph caches in persistent
+storage so later jobs skip compilation, (ii) appends every measurement to disk
+immediately, and (iii) stops itself before a soft time budget, so a killed job still
+keeps all completed rows.
+The full H100 campaign uses \tbd GPU-minutes.

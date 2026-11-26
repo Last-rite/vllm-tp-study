@@ -1,0 +1,54 @@
+\section{Introduction}
+\label{sec:intro}
+
+% 第一段：問題與重要性。
+Serving large language models (LLMs) is now one of the largest consumers of GPU time.
+Each request runs in two phases with different bottlenecks.
+The \emph{prefill} phase processes the whole prompt at once and is compute bound.
+The \emph{decode} phase then produces one token per step; each step reads all model
+weights and the key--value (KV) cache, so it is bound by memory bandwidth.
+Engines such as \vllm~\cite{kwon2023pagedattention} keep GPUs busy with continuous
+batching~\cite{yu2022orca} and paged KV-cache management, and they split a model across
+GPUs with Megatron-style tensor parallelism (TP)~\cite{shoeybi2019megatron}.
+
+% 第二段：現有方法的不足。
+TP divides every layer's matrix multiplications across $p$ GPUs, so each GPU reads only
+$1/p$ of the weights.
+For memory-bound decode this promises close to a $p$-fold reduction in step time.
+The price is two all-reduce operations per Transformer layer, on the critical path of
+every step.
+On datacenter GPUs, NVLink makes this cost small.
+Commodity GPUs, however, communicate over PCIe and often without direct peer-to-peer
+access, so the all-reduce can erase the gain.
+Prior analytical work on TP inference targets TPU pods~\cite{pope2023efficiently}, and
+serving-system papers usually report results on a single interconnect.
+A practitioner who owns a few consumer GPUs therefore cannot easily tell whether TP will
+help, or by how much.
+
+% 第三段：本文方法概述。
+In this paper we answer two questions:
+\textbf{(Q1)} How well does TP in \vllm scale on NVLink-connected H100 GPUs compared with
+PCIe-connected RTX~4090 GPUs, and how much of the gap is due to communication?
+\textbf{(Q2)} Can a simple model, calibrated on one GPU plus an all-reduce
+microbenchmark, predict multi-GPU performance?
+We run the same model, the same \vllm version and the same workload on both platforms,
+sweep the batch size and the TP degree, and profile the GPU kernels.
+
+% 貢獻列表（PPoPP 要求明確寫出 key contributions）
+This paper makes the following contributions:
+\begin{itemize}
+  \item A controlled measurement of TP strong and weak scaling in \vllm on NVLink (H100,
+        $p\le2$) and PCIe (RTX~4090, $p\le4$), separated into prefill and decode
+        (\S\ref{sec:eval}).
+  \item A kernel-level breakdown and an ablation of \vllm's custom all-reduce and CUDA
+        graphs, which attribute the scaling gap to communication and synchronization
+        (\S\ref{sec:eval}).
+  \item A communication-aware analytical model that predicts TP step time from
+        single-GPU runs and an all-reduce microbenchmark, with \tbd\% mean error
+        (\S\ref{sec:design}, \S\ref{sec:eval}).
+  \item An open benchmark harness that runs within strict shared-cluster limits
+        (6-minute jobs, 2 GPUs, 100\,GB storage) and regenerates every figure in this
+        paper with one command.
+\end{itemize}
+
+% 雙盲提醒：引用自己的舊作請用第三人稱。

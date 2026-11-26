@@ -1,0 +1,30 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{LLM serving systems.}
+Orca~\cite{yu2022orca} introduced iteration-level scheduling, and
+\vllm~\cite{kwon2023pagedattention} added paged KV-cache management; together they define
+the continuous-batching design we study.
+Sarathi-Serve~\cite{agrawal2024sarathi} splits prefills into chunks to protect decode
+latency, and DistServe~\cite{zhong2024distserve} places prefill and decode on different
+GPUs.
+FlashAttention~\cite{dao2022flashattention,dao2024flashattention2} reduces the memory
+traffic of attention kernels.
+These systems improve scheduling and kernels; we instead measure and model how one of
+them scales with the GPU interconnect.
+
+\paragraph{Model parallelism.}
+Megatron-LM~\cite{shoeybi2019megatron} introduced the TP partitioning used by \vllm, and
+Narayanan et al.~\cite{narayanan2021efficient} combined tensor, pipeline and data
+parallelism for training at scale.
+Their evaluation targets training on NVLink and InfiniBand clusters, where messages are
+large; inference decode exchanges much smaller messages.
+
+\paragraph{Performance modeling.}
+The roofline model~\cite{williams2009roofline} bounds performance by compute and memory
+bandwidth, and latency--bandwidth models of collectives~\cite{hockney1994communication,
+thakur2005optimization} estimate the cost of all-reduce.
+Pope et al.~\cite{pope2023efficiently} combine both ideas to choose partitioning layouts
+for Transformer inference on TPU~v4.
+Our model is simpler and is calibrated and validated on GPUs, against an open-source
+serving engine, on two very different interconnects.

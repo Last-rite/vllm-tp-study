@@ -1,0 +1,19 @@
+% 摘要：100--400 字。問題 → 方法 → 主要結果（具體數字）→ 意義。數字待實驗後填入（紅字 [TBD]）。
+Tensor parallelism (TP) is the default way to spread large language model (LLM) inference
+across GPUs, but its benefit depends on how fast the GPUs can all-reduce activations.
+Datacenter GPUs connect through NVLink, while commodity GPUs exchange data over PCIe,
+and practitioners have little guidance on when adding GPUs actually pays off.
+We study the vLLM inference engine on two platforms: NVIDIA H100 GPUs connected by NVLink
+and RTX~4090 GPUs connected by PCIe.
+We measure strong and weak scaling of TP for the prefill and decode phases, profile where
+GPU time goes, and ablate two communication-related engine features: vLLM's custom
+all-reduce kernel and CUDA graphs.
+We then build a simple analytical model that combines a roofline-style compute and memory
+term with an all-reduce term calibrated by a communication microbenchmark.
+On H100, TP=2 reaches a decode speedup of \tbd (\tbd\% efficiency).
+On RTX~4090, TP=2 and TP=4 reach \tbd and \tbd, and all-reduce accounts for up to
+\tbd\% of GPU kernel time.
+Calibrated only on single-GPU runs, the model predicts multi-GPU step time with a mean
+error of \tbd\%.
+We release all scripts and data, designed to run under strict cluster limits of
+6-minute, 2-GPU jobs.
