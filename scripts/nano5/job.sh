@@ -23,7 +23,7 @@ case "$1" in
   allreduce)     WHAT="allreduce-p${2:-?}" ;;
   *)             WHAT="$1" ;;
 esac
-export VTP_GIT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)$(git diff --quiet 2>/dev/null || echo -dirty)"
+export VTP_GIT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)$(git diff --quiet -- . ':(exclude)results' 2>/dev/null || echo -dirty)"
 LOG=results/logs/nano5_${VTP_STEP}_${WHAT}_$(date +%Y%m%d-%H%M%S)_${SLURM_JOB_ID:-nojob}.log
 export VTP_LOG="$LOG"
 mkdir -p results/logs
