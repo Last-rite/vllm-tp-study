@@ -1,0 +1,17 @@
+{
+  "platform": "h100",
+  "p": 2,
+  "peer_access": {
+    "0->1": true,
+    "1->0": true
+  },
+  "gpu_names": [
+    "NVIDIA H100 80GB HBM3",
+    "NVIDIA H100 80GB HBM3"
+  ],
+  "torch": "2.13.0+cu129",
+  "nccl": "2.29.7",
+  "host": "hgpn01",
+  "wall_s": 3.9575700759887695,
+  "env": {}
+}

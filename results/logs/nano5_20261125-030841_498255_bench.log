@@ -1,0 +1,7 @@
+== job 498255 on hgpn01 at Wed Nov 25 03:08:41 CST 2026  args: bench 1 smoke --batches 1,64 --reps 1
+index, name, driver_version, memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+0, NVIDIA H100 80GB HBM3, 550.127.08, 1 MiB, 81559 MiB, 0 %
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'importlib.metadata'
+FATAL: torch/vllm not installed in /home/b14902075/vtp-store/venv

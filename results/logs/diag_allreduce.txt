@@ -1,0 +1,104 @@
+== mnnvl 出現的位置
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/deepseek_v41/nvidia/ops/mhc.py:72:    return comm is not None and bool(comm.mnnvl_lamport_ag_multicast_ptr)
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/deepseek_v41/nvidia/ops/cute_dsl/all_reduce_mhc.py:4:# (flashinfer/comm/mnnvl_cutedsl/kernel_ll, flashinfer-ai/flashinfer@139af6f6).
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/deepseek_v41/nvidia/ops/cute_dsl/primitives.py:3:# Adapted from FlashInfer's flashinfer/comm/mnnvl_cutedsl/cute_dsl_primitives.py
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:468:    def _initialize_mnnvl_buffers(self) -> None:
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:470:        self._mnnvl_input_handle.lamport_initialize(self.rank, torch.bfloat16)
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:471:        self._mnnvl_output_handle.lamport_initialize(self.rank, torch.bfloat16)
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:524:                from flashinfer.comm.mnnvl import (
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:527:                    is_mnnvl_fabric_supported,
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:535:                is_mnnvl_fabric_supported(torch.accelerator.current_device_index())
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:546:            self._mnnvl_input_handle = McastGPUBuffer(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:553:            self._mnnvl_output_handle = McastGPUBuffer(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:560:            self.input_peer_ptrs = self._mnnvl_input_handle.get_buffer_ptrs_dev()
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:561:            self.output_peer_ptrs = self._mnnvl_output_handle.get_buffer_ptrs_dev()
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/models/inkling/nvidia/ops/lamport.py:562:            self._initialize_mnnvl_buffers()
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/config/parallel.py:230:    - "flashinfer_nvlink_two_sided": Use flashinfer two-sided kernels for mnnvl
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/model_executor/layers/fused_moe/prepare_finalize/flashinfer_nvlink_two_sided.py:150:        MnnvlMoe.mnnvl_moe_alltoallv_prepare_without_allgather(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/model_executor/layers/fused_moe/prepare_finalize/flashinfer_nvlink_two_sided.py:180:        x = MnnvlMoe.mnnvl_moe_alltoallv(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/model_executor/layers/fused_moe/prepare_finalize/flashinfer_nvlink_two_sided.py:189:            x_sf = MnnvlMoe.mnnvl_moe_alltoallv(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/model_executor/layers/fused_moe/prepare_finalize/flashinfer_nvlink_two_sided.py:209:        x = MnnvlMoe.mnnvl_moe_alltoallv(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/model_executor/layers/fused_moe/prepare_finalize/flashinfer_nvlink_two_sided.py:231:    return MnnvlMoe.mnnvl_moe_alltoallv_combine(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/model_executor/layers/fused_allreduce_gemma_rms_norm.py:102:    # may use only a fraction of it per call (mnnvl rotates through three Lamport
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/_custom_ops.py:3128:def mnnvl_lamport_all_gather(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/_custom_ops.py:3137:    torch.ops._C_custom_ar.mnnvl_lamport_all_gather(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/_custom_ops.py:3160:def mnnvl_lamport_reduce_scatter(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/_custom_ops.py:3168:    torch.ops._C_custom_ar.mnnvl_lamport_reduce_scatter(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/_custom_ops.py:3173:def mnnvl_multimem_reduce_scatter(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/_custom_ops.py:3182:    torch.ops._C_custom_ar.mnnvl_multimem_reduce_scatter(
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/distributed/device_communicators/mnnvl_compat.py:6:from flashinfer.comm.mnnvl import CommBackend as CommBackend
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/distributed/device_communicators/custom_all_reduce.py:35:_ReduceScatterBackend = Literal["legacy", "mnnvl_lamport", "mnnvl_multimem"]
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/distributed/device_communicators/custom_all_reduce.py:65:def _group_can_attempt_mnnvl(
+== envs.py 相關變數
+50:    VLLM_USE_FLASHINFER_SAMPLER: bool = True
+139:    VLLM_ROCM_USE_AITER_CUSTOM_AR: bool = True
+221:    VLLM_BLOCKSCALE_FP8_GEMM_FLASHINFER: bool = True
+222:    VLLM_USE_FLASHINFER_MOE_INT4: bool = False
+223:    VLLM_FLASHINFER_AUTOTUNE_CACHE_DIR: str | None = None
+224:    VLLM_FLASHINFER_AUTOTUNE_SKIP_OPS: list[str] | None = None
+225:    VLLM_FLASHINFER_ALLREDUCE_BACKEND: Literal["auto", "trtllm", "mnnvl"] = "auto"
+226:    VLLM_FLASHINFER_WORKSPACE_BUFFER_SIZE: int = 394 * 1024 * 1024
+227:    VLLM_FLASHINFER_MOE_A2A_LOW_PRECISION_COMBINE: bool = False
+275:    VLLM_HAS_FLASHINFER_CUBIN: bool = False
+277:    VLLM_ALLREDUCE_USE_SYMM_MEM: bool = True
+278:    VLLM_ALLREDUCE_USE_FLASHINFER: bool = True
+279:    VLLM_ALLREDUCE_USE_FLASHINFER_PCIE_IPC: bool = False
+302:    VLLM_USE_NCCL_SYMM_MEM: bool = False
+878:    "VLLM_USE_FLASHINFER_SAMPLER": lambda: (
+879:        bool(int(os.environ["VLLM_USE_FLASHINFER_SAMPLER"]))
+880:        if "VLLM_USE_FLASHINFER_SAMPLER" in os.environ
+1274:    "VLLM_ROCM_USE_AITER_CUSTOM_AR": lambda: (
+1275:        os.getenv("VLLM_ROCM_USE_AITER_CUSTOM_AR", "True").lower() in ("true", "1")
+1691:    "VLLM_BLOCKSCALE_FP8_GEMM_FLASHINFER": lambda: bool(
+1692:        int(os.getenv("VLLM_BLOCKSCALE_FP8_GEMM_FLASHINFER", "1"))
+1699:    "VLLM_USE_FLASHINFER_MOE_INT4": lambda: bool(
+1700:        int(os.getenv("VLLM_USE_FLASHINFER_MOE_INT4", "0"))
+1809:    "VLLM_FLASHINFER_AUTOTUNE_CACHE_DIR": lambda: os.getenv(
+1810:        "VLLM_FLASHINFER_AUTOTUNE_CACHE_DIR", None
+1815:    "VLLM_FLASHINFER_AUTOTUNE_SKIP_OPS": lambda: (
+1817:        if "VLLM_FLASHINFER_AUTOTUNE_SKIP_OPS" not in os.environ
+1820:            for v in os.environ["VLLM_FLASHINFER_AUTOTUNE_SKIP_OPS"].split(",")
+1825:    "VLLM_FLASHINFER_ALLREDUCE_BACKEND": env_with_choices(
+1826:        "VLLM_FLASHINFER_ALLREDUCE_BACKEND",
+1831:    "VLLM_FLASHINFER_WORKSPACE_BUFFER_SIZE": lambda: int(
+1832:        os.getenv("VLLM_FLASHINFER_WORKSPACE_BUFFER_SIZE", str(394 * 1024 * 1024))
+1837:    "VLLM_FLASHINFER_MOE_A2A_LOW_PRECISION_COMBINE": lambda: bool(
+1838:        int(os.getenv("VLLM_FLASHINFER_MOE_A2A_LOW_PRECISION_COMBINE", "0"))
+1918:    "VLLM_HAS_FLASHINFER_CUBIN": lambda: bool(
+1919:        int(os.getenv("VLLM_HAS_FLASHINFER_CUBIN", "0"))
+1966:    "VLLM_ALLREDUCE_USE_SYMM_MEM": lambda: bool(
+1967:        int(os.getenv("VLLM_ALLREDUCE_USE_SYMM_MEM", "1"))
+1970:    "VLLM_ALLREDUCE_USE_FLASHINFER": lambda: bool(
+1971:        int(os.getenv("VLLM_ALLREDUCE_USE_FLASHINFER", "1"))
+1976:    "VLLM_ALLREDUCE_USE_FLASHINFER_PCIE_IPC": lambda: bool(
+1977:        int(os.getenv("VLLM_ALLREDUCE_USE_FLASHINFER_PCIE_IPC", "0"))
+2099:    "VLLM_USE_NCCL_SYMM_MEM": lambda: bool(
+2100:        int(os.getenv("VLLM_USE_NCCL_SYMM_MEM", "0"))
+2370:        # (VLLM_CACHE_ROOT above and VLLM_FLASHINFER_AUTOTUNE_CACHE_DIR below
+2401:        "VLLM_FLASHINFER_AUTOTUNE_CACHE_DIR",
+2402:        "VLLM_FLASHINFER_AUTOTUNE_SKIP_OPS",
+== N2 log 中的通訊相關訊息
+results/logs/nano5_20261125-105101_498785_bench.log
+15:(MainProcess pid=2773126) INFO 11-25 10:51:12 [compilation.py:317] Enabled custom fusions: allreduce_rms
+16:(EngineCore pid=2774115) INFO 11-25 10:51:23 [core.py:133] Initializing a V1 LLM engine (v0.32.0) with config: model='/home/b14902075/vtp-store/hf/models/Qwen3-8B', speculative_config=None, tokenizer='/home/b14902075/vtp-store/hf/models/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=400, download_dir=None, load_format=auto, tensor_parallel_size=2, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, aux_output_config=AuxOutputConfig(enable_return_routed_experts=False, max_bytes=None), kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, per_request_spec_decode_metrics='none', kv_cache_metrics=False, kv_cache_metrics_sample=0.01, custom_histogram_buckets=None, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=/home/b14902075/vtp-store/hf/models/Qwen3-8B, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::qwen4_exp_ple_short_conv', 'vllm::qwen4_exp_qsa_with_output', 'vllm::qwen4_exp_qsa_prepare_with_output', 'vllm::linear_attention', 'vllm::qwen_gdn_attention_core', 'vllm::qwen_gdn_attention_core_fused_norm_packed', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::hpc_rope_norm_forward', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'cudagraph_decoder_replay': True, 'decoder_replay_cudagraph_capture_sizes': [], 'decoder_replay_trim_threshold': 768, 'compile_sizes': [], 'compile_ranges_endpoints': [8192, 16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'fuse_allreduce_rms': True, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 128, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native']), enable_flashinfer_autotune=True, enable_rocm_segmented_attn_autotune=False, enable_cutedsl_warmup=True, enable_jit_warmup=True, moe_backend='auto', sparse_indexer_topk_backend='auto', linear_backend='auto', linear_backend_per_quant=None)
+18:(Worker pid=2775600) INFO 11-25 10:51:33 [parallel_state.py:1906] world_size=2 rank=0 local_rank=0 distributed_init_method=file:///home/b14902075/vtp-store/tmp/vllm_dist_6a5138d6f71c4f4cbbce806ed03986ac backend=nccl
+19:(Worker pid=2775601) INFO 11-25 10:51:33 [parallel_state.py:1906] world_size=2 rank=1 local_rank=1 distributed_init_method=file:///home/b14902075/vtp-store/tmp/vllm_dist_6a5138d6f71c4f4cbbce806ed03986ac backend=nccl
+24:(Worker pid=2775600) INFO 11-25 10:51:34 [pynccl.py:148] vLLM is using nccl==2.29.7
+25:(Worker pid=2775600) INFO 11-25 10:51:38 [cuda_communicator.py:353] Using ['FLASHINFER', 'CUSTOM', 'SYMM_MEM', 'PYNCCL'] all-reduce backends (in dispatch order) for group 'tp:0' out of potential backends: ['FLASHINFER_PCIE_IPC', 'FLASHINFER', 'NCCL_SYMM_MEM', 'QUICK_REDUCE', 'AITER_CUSTOM', 'CUSTOM', 'SYMM_MEM', 'PYNCCL'].
+57:Capturing CUDA graphs (PIECEWISE):   0%|          | 0/19 [00:00<?, ?it/s](Worker_TP0 pid=2775600) INFO 11-25 10:51:46 [flashinfer_all_reduce.py:236] Initialized FlashInfer Allreduce norm fusion workspace with backend=mnnvl
+158:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]     torch.ops.vllm.flashinfer_trtllm_fused_allreduce_norm.default(allreduce_in=buf0, residual=buf4, norm_out=buf3, quant_out=None, scale_out=None, rms_gamma=arg3_1, rms_eps=1e-06, pattern_code=1, world_size=2, launch_with_pdl=True, fp32_acc=True, max_token_num=8192)
+174:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]   File "/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/compilation/passes/fusion/allreduce_rms_fusion.py", line 265, in call_trtllm_fused_allreduce_norm
+175:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]     flashinfer_comm.allreduce_fusion(
+179:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]   File "/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/flashinfer/comm/allreduce.py", line 1141, in allreduce_fusion
+180:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]     norm_result, residual_result = trtllm_mnnvl_fused_allreduce_add_rmsnorm(
+182:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]   File "/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/flashinfer/comm/trtllm_mnnvl_ar.py", line 597, in trtllm_mnnvl_fused_allreduce_add_rmsnorm
+197:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063] FAILED: [code=1] /home/b14902075/.cache/flashinfer/0.7.0.post1/90a/cached_ops/trtllm_mnnvl_comm/csrc_trtllm_mnnvl_allreduce.cuda.o 
+298:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]     torch.ops.vllm.flashinfer_trtllm_fused_allreduce_norm.default(allreduce_in=buf0, residual=buf4, norm_out=buf3, quant_out=None, scale_out=None, rms_gamma=arg3_1, rms_eps=1e-06, pattern_code=1, world_size=2, launch_with_pdl=True, fp32_acc=True, max_token_num=8192)
+314:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]   File "/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/vllm/compilation/passes/fusion/allreduce_rms_fusion.py", line 265, in call_trtllm_fused_allreduce_norm
+315:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]     flashinfer_comm.allreduce_fusion(
+319:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]   File "/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/flashinfer/comm/allreduce.py", line 1141, in allreduce_fusion
+320:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]     norm_result, residual_result = trtllm_mnnvl_fused_allreduce_add_rmsnorm(
+322:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063]   File "/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/flashinfer/comm/trtllm_mnnvl_ar.py", line 597, in trtllm_mnnvl_fused_allreduce_add_rmsnorm
+337:(Worker_TP0 pid=2775600) ERROR 11-25 10:51:47 [multiproc_executor.py:1063] FAILED: [code=1] /home/b14902075/.cache/flashinfer/0.7.0.post1/90a/cached_ops/trtllm_mnnvl_comm/csrc_trtllm_mnnvl_allreduce.cuda.o 
+384:(EngineCore pid=2774115) ERROR 11-25 10:51:47 [core.py:1510] FAILED: [code=1] /home/b14902075/.cache/flashinfer/0.7.0.post1/90a/cached_ops/trtllm_mnnvl_comm/csrc_trtllm_mnnvl_allreduce.cuda.o 
+439:FAILED: [code=1] /home/b14902075/.cache/flashinfer/0.7.0.post1/90a/cached_ops/trtllm_mnnvl_comm/csrc_trtllm_mnnvl_allreduce.cuda.o 

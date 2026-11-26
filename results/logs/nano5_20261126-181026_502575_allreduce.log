@@ -1,0 +1,30 @@
+== job 502575 on hgpn01 at Thu Nov 26 18:10:26 CST 2026  args: allreduce 2
+index, name, driver_version, memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+0, NVIDIA H100 80GB HBM3, 550.127.08, 1 MiB, 81559 MiB, 0 %
+1, NVIDIA H100 80GB HBM3, 550.127.08, 1 MiB, 81559 MiB, 0 %
+python /home/b14902075/vtp-store/venv/bin/python
+torch 2.13.0+cu129 vllm 0.32.0+cu129
+peer access: {'0->1': True, '1->0': True}
+/home/b14902075/vtp-store/venv/lib/python3.11/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+        1024 B       20.48 us  busbw     0.05 GB/s
+        2048 B       19.51 us  busbw     0.10 GB/s
+        4096 B       19.38 us  busbw     0.21 GB/s
+        8192 B       19.73 us  busbw     0.42 GB/s
+       16384 B       21.60 us  busbw     0.76 GB/s
+       32768 B       20.09 us  busbw     1.63 GB/s
+       65536 B       20.43 us  busbw     3.21 GB/s
+      131072 B       33.38 us  busbw     3.93 GB/s
+      262144 B       22.50 us  busbw    11.65 GB/s
+      524288 B       19.96 us  busbw    26.27 GB/s
+     1048576 B       20.64 us  busbw    50.81 GB/s
+     2097152 B       32.91 us  busbw    63.72 GB/s
+     4194304 B       37.94 us  busbw   110.55 GB/s
+     8388608 B       52.87 us  busbw   158.66 GB/s
+    16777216 B       83.30 us  busbw   201.41 GB/s
+    33554432 B      149.57 us  busbw   224.35 GB/s
+    67108864 B      263.43 us  busbw   254.75 GB/s
+   134217728 B      495.79 us  busbw   270.72 GB/s
+   268435456 B      941.69 us  busbw   285.06 GB/s
+done -> results/raw/allreduce_h100_p2_20261126-181029.csv  (3.9s)
+== exit code 0 at Thu Nov 26 18:10:33 CST 2026
