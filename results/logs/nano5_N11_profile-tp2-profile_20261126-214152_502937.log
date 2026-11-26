@@ -1,0 +1,166 @@
+== step N11  experiment profile-tp2-profile  git 40df798-dirty
+== job 502937 on hgpn04 at Thu Nov 26 21:41:52 CST 2026  args: profile 2 profile
+index, name, driver_version, memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+0, NVIDIA H100 80GB HBM3, 550.127.08, 1 MiB, 81559 MiB, 0 %
+1, NVIDIA H100 80GB HBM3, 550.127.08, 1 MiB, 81559 MiB, 0 %
+python /home/b14902075/vtp-store/venv/bin/python
+torch 2.13.0+cu129 vllm 0.32.0+cu129
+[bench     0.0s] model=/home/b14902075/vtp-store/hf/models/Qwen3-8B tp=2 batches=[8, 32] reps=1 I=256 O=32 budget=200s
+(MainProcess pid=869042) INFO 11-26 21:42:07 [api_utils.py:286] non-default args: {'dtype': 'bfloat16', 'max_model_len': 304, 'tensor_parallel_size': 2, 'enable_prefix_caching': False, 'gpu_memory_utilization': 0.9, 'max_num_seqs': 32, 'disable_log_stats': True, 'compilation_config': {'mode': None, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': [], 'ir_enable_torch_wrap': None, 'splitting_ops': None, 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'cudagraph_decoder_replay': True, 'decoder_replay_cudagraph_capture_sizes': [], 'decoder_replay_trim_threshold': 768, 'compile_sizes': None, 'compile_ranges_endpoints': None, 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': None, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': None, 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': None, 'pass_config': {'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': None, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': None, 'static_all_moe_layers': []}, 'model': '/home/b14902075/vtp-store/hf/models/Qwen3-8B'}
+(MainProcess pid=869042) INFO 11-26 21:42:07 [model.py:733] Resolved architecture: Qwen3ForCausalLM
+(MainProcess pid=869042) INFO 11-26 21:42:07 [model.py:2152] Using max model len 304
+(MainProcess pid=869042) INFO 11-26 21:42:07 [scheduler.py:307] Chunked prefill is enabled with max_num_batched_tokens=9728.
+(MainProcess pid=869042) INFO 11-26 21:42:07 [kernel.py:467] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native'])
+(EngineCore pid=870438) INFO 11-26 21:42:17 [core.py:133] Initializing a V1 LLM engine (v0.32.0) with config: model='/home/b14902075/vtp-store/hf/models/Qwen3-8B', speculative_config=None, tokenizer='/home/b14902075/vtp-store/hf/models/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=304, download_dir=None, load_format=auto, tensor_parallel_size=2, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, aux_output_config=AuxOutputConfig(enable_return_routed_experts=False, max_bytes=None), kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, per_request_spec_decode_metrics='none', kv_cache_metrics=False, kv_cache_metrics_sample=0.01, custom_histogram_buckets=None, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=/home/b14902075/vtp-store/hf/models/Qwen3-8B, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::qwen4_exp_ple_short_conv', 'vllm::qwen4_exp_qsa_with_output', 'vllm::qwen4_exp_qsa_prepare_with_output', 'vllm::linear_attention', 'vllm::qwen_gdn_attention_core', 'vllm::qwen_gdn_attention_core_fused_norm_packed', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::hpc_rope_norm_forward', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'cudagraph_decoder_replay': True, 'decoder_replay_cudagraph_capture_sizes': [], 'decoder_replay_trim_threshold': 768, 'compile_sizes': [], 'compile_ranges_endpoints': [9728], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 64, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native']), enable_flashinfer_autotune=True, enable_rocm_segmented_attn_autotune=False, enable_cutedsl_warmup=True, enable_jit_warmup=True, moe_backend='auto', sparse_indexer_topk_backend='auto', linear_backend='auto', linear_backend_per_quant=None)
+(EngineCore pid=870438) INFO 11-26 21:42:17 [multiproc_executor.py:153] DP group leader: node_rank=0, node_rank_within_dp=0, master_addr=127.0.0.1, mq_connect_ip=172.21.100.14 (local), world_size=2, local_world_size=2
+(Worker pid=870827) INFO 11-26 21:42:27 [parallel_state.py:1906] world_size=2 rank=0 local_rank=0 distributed_init_method=file:///home/b14902075/vtp-store/tmp/vllm_dist_9387c3a5a87d4743968f1410ef21de69 backend=nccl
+(Worker pid=870828) INFO 11-26 21:42:28 [parallel_state.py:1906] world_size=2 rank=1 local_rank=1 distributed_init_method=file:///home/b14902075/vtp-store/tmp/vllm_dist_9387c3a5a87d4743968f1410ef21de69 backend=nccl
+<frozen importlib._bootstrap_external>:1241: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1241: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+<frozen importlib._bootstrap_external>:1241: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1241: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+(Worker pid=870827) INFO 11-26 21:42:30 [pynccl.py:148] vLLM is using nccl==2.29.7
+(Worker pid=870827) INFO 11-26 21:42:31 [cuda_communicator.py:353] Using ['CUSTOM', 'PYNCCL'] all-reduce backends (in dispatch order) for group 'tp:0' out of potential backends: ['FLASHINFER_PCIE_IPC', 'FLASHINFER', 'NCCL_SYMM_MEM', 'QUICK_REDUCE', 'AITER_CUSTOM', 'CUSTOM', 'SYMM_MEM', 'PYNCCL'].
+(Worker pid=870827) INFO 11-26 21:42:31 [parallel_state.py:2350] rank 0 in world size 2 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, ETP rank 0, EP rank N/A, EPLB rank N/A
+(Worker pid=870827) INFO 11-26 21:42:31 [gpu_worker.py:518] Using V2 Model Runner
+(Worker_TP0 pid=870827) INFO 11-26 21:42:32 [model_runner.py:392] Loading model from scratch...
+(Worker_TP0 pid=870827) INFO 11-26 21:42:32 [cuda.py:506] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(Worker_TP0 pid=870827) INFO 11-26 21:42:32 [flash_attn.py:1117] Using FlashAttention version 3
+(Worker_TP0 pid=870827) INFO 11-26 21:42:33 [base_loader.py:82] Initializing model took 0.451117 seconds
+(Worker_TP0 pid=870827) INFO 11-26 21:42:33 [weight_utils.py:1108] Filesystem type for checkpoints: WEKAFS. Checkpoint size: 15.26 GiB. Available RAM: 1876.23 GiB.
+(Worker_TP0 pid=870827) INFO 11-26 21:42:33 [weight_utils.py:1131] Auto-prefetch is disabled because the filesystem (WEKAFS) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+Loading safetensors checkpoint shards:   0% Completed | 0/5 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  20% Completed | 1/5 [00:00<00:02,  1.41it/s]
+Loading safetensors checkpoint shards:  40% Completed | 2/5 [00:01<00:02,  1.26it/s]
+Loading safetensors checkpoint shards:  60% Completed | 3/5 [00:02<00:01,  1.24it/s]
+Loading safetensors checkpoint shards:  80% Completed | 4/5 [00:03<00:00,  1.32it/s]
+Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:03<00:00,  1.81it/s]
+Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:03<00:00,  1.54it/s]
+
+(Worker_TP0 pid=870827) INFO 11-26 21:42:36 [default_loader.py:501] Loading weights took 3.27 seconds
+(Worker_TP0 pid=870827) INFO 11-26 21:42:37 [model_runner.py:424] Model loading took 7.64 GiB memory and 5.307019 seconds
+(Worker_TP0 pid=870827) INFO 11-26 21:42:37 [topk_topp_sampler.py:96] FlashInfer top-p/top-k sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0.
+(Worker_TP0 pid=870827) WARNING 11-26 21:42:37 [torch_utils.py:283] OMP_NUM_THREADS=2 is set; leaving Torch threads at 2 for serving. Multi-threaded torch CPU ops during serving can degrade performance through spin-wait contention and cgroup CPU-quota throttling.
+(Worker_TP1 pid=870828) INFO 11-26 21:42:37 [model_runner.py:424] Model loading took 7.64 GiB memory and 5.377609 seconds
+(EngineCore pid=870438) WARNING 11-26 21:42:37 [torch_utils.py:283] OMP_NUM_THREADS=2 is set; leaving Torch threads at 2 for serving. Multi-threaded torch CPU ops during serving can degrade performance through spin-wait contention and cgroup CPU-quota throttling.
+(EngineCore pid=870438) INFO 11-26 21:42:37 [utils.py:347] Using LBNHC KV cache layout.
+(Worker_TP0 pid=870827) INFO 11-26 21:42:39 [caching.py:342] reconstructed serializable fn from standalone compile artifacts. num_artifacts=3 num_submods=37
+(Worker_TP1 pid=870828) INFO 11-26 21:42:39 [caching.py:342] reconstructed serializable fn from standalone compile artifacts. num_artifacts=3 num_submods=37
+(Worker_TP0 pid=870827) INFO 11-26 21:42:39 [decorators.py:319] [backbone] Directly load AOT compilation from path /home/b14902075/vtp-store/cache/vllm/torch_compile_cache/torch_aot_compile/e06bf076b53b87364ed473b4b60d9965a61ed832364286cc696c4aae996f331d/rank_0_0/model
+(Worker_TP0 pid=870827) INFO 11-26 21:42:39 [monitor.py:62] [backbone] torch.compile took 0.32 s in total
+(Worker_TP1 pid=870828) INFO 11-26 21:42:39 [decorators.py:319] [backbone] Directly load AOT compilation from path /home/b14902075/vtp-store/cache/vllm/torch_compile_cache/torch_aot_compile/e06bf076b53b87364ed473b4b60d9965a61ed832364286cc696c4aae996f331d/rank_1_0/model
+(Worker_TP1 pid=870828) INFO 11-26 21:42:39 [monitor.py:62] [backbone] torch.compile took 0.32 s in total
+(Worker_TP0 pid=870827) INFO 11-26 21:42:39 [monitor.py:91] [backbone] Initial profiling/warmup run took 0.17 s
+(Worker_TP1 pid=870828) INFO 11-26 21:42:39 [monitor.py:91] [backbone] Initial profiling/warmup run took 0.17 s
+Capturing CUDA graphs (PIECEWISE):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (PIECEWISE):  18%|█▊        | 2/11 [00:00<00:00, 12.17it/s]Capturing CUDA graphs (PIECEWISE):  36%|███▋      | 4/11 [00:00<00:00, 13.30it/s]Capturing CUDA graphs (PIECEWISE):  55%|█████▍    | 6/11 [00:00<00:00, 13.07it/s]Capturing CUDA graphs (PIECEWISE):  73%|███████▎  | 8/11 [00:00<00:00, 13.15it/s]Capturing CUDA graphs (PIECEWISE):  91%|█████████ | 10/11 [00:00<00:00, 14.91it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:00<00:00, 14.37it/s]
+Capturing CUDA graphs (FULL):   0%|          | 0/2 [00:00<?, ?it/s]Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:00<00:00, 29.01it/s]
+(Worker_TP0 pid=870827) INFO 11-26 21:42:42 [model_runner.py:1127] Graph capturing finished in 2 secs, took 0.16 GiB
+(Worker_TP1 pid=870828) INFO 11-26 21:42:42 [model_runner.py:1127] Graph capturing finished in 1 secs, took 0.16 GiB
+(Worker_TP0 pid=870827) INFO 11-26 21:42:42 [gpu_worker.py:759] Available KV cache memory: 62.72 GiB
+(Worker_TP0 pid=870827) INFO 11-26 21:42:42 [gpu_worker.py:774] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.9000 is equivalent to --gpu-memory-utilization=0.8978 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.9022. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+(Worker_TP1 pid=870828) INFO 11-26 21:42:42 [gpu_worker.py:774] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.9000 is equivalent to --gpu-memory-utilization=0.8978 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.9022. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+(EngineCore pid=870438) INFO 11-26 21:42:42 [kv_cache_utils.py:2327] GPU KV cache size: 913,424 tokens, Maximum concurrency for 304 tokens per request: 3004.68x
+(Worker_TP0 pid=870827) INFO 11-26 21:42:42 [kernel_warmup.py:176] JIT kernel warmup starting.
+(Worker_TP1 pid=870828) INFO 11-26 21:42:42 [kernel_warmup.py:176] JIT kernel warmup starting.
+(Worker_TP0 pid=870827) INFO 11-26 21:42:42 [kernel_warmup.py:189] JIT kernel warmup finished in 0.00s.
+(Worker_TP1 pid=870828) INFO 11-26 21:42:42 [kernel_warmup.py:189] JIT kernel warmup finished in 0.00s.
+(Worker_TP1 pid=870828) INFO 11-26 21:42:43 [kernel.py:467] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native'])
+(Worker_TP0 pid=870827) INFO 11-26 21:42:43 [kernel.py:467] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native'])
+(Worker_TP0 pid=870827) INFO 11-26 21:42:43 [kernel_warmup.py:460] Using FlashInfer autotune cache file: /home/b14902075/vtp-store/cache/vllm/flashinfer_autotune_cache/0.7.0.post1/90a/8090cf435592e3db1f1434d8ddaf3ec76955f3c125c349d25aa9f9d54ac3d86e/autotune_configs_dp0_rank0.json
+2026-11-26 21:42:43,214 - INFO - autotuner.py:1046 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+2026-11-26 21:42:43,214 - INFO - autotuner.py:1046 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+(Worker_TP1 pid=870828) INFO 11-26 21:42:43 [kernel_warmup.py:367] Running FlashInfer autotune with 9728 tokens and token buckets (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 768, 1024, 1280, 1536, 1792, 2048, 2560, 3072, 3584, 4096, 8192, 9728).
+(Worker_TP0 pid=870827) INFO 11-26 21:42:43 [kernel_warmup.py:367] Running FlashInfer autotune with 9728 tokens and token buckets (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 768, 1024, 1280, 1536, 1792, 2048, 2560, 3072, 3584, 4096, 8192, 9728).
+2026-11-26 21:42:43,252 - INFO - autotuner.py:1069 - flashinfer.jit: [Autotuner]: Autotuning process ends
+2026-11-26 21:42:43,253 - INFO - autotuner.py:1069 - flashinfer.jit: [Autotuner]: Autotuning process ends
+Capturing CUDA graphs (PIECEWISE):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (PIECEWISE):  18%|█▊        | 2/11 [00:00<00:00, 15.09it/s]Capturing CUDA graphs (PIECEWISE):  36%|███▋      | 4/11 [00:00<00:00, 15.05it/s]Capturing CUDA graphs (PIECEWISE):  55%|█████▍    | 6/11 [00:00<00:00, 15.09it/s]Capturing CUDA graphs (PIECEWISE):  73%|███████▎  | 8/11 [00:00<00:00, 15.23it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:00<00:00, 17.24it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:00<00:00, 16.31it/s]
+Capturing CUDA graphs (FULL):   0%|          | 0/7 [00:00<?, ?it/s]Capturing CUDA graphs (FULL):  43%|████▎     | 3/7 [00:00<00:00, 27.75it/s]Capturing CUDA graphs (FULL):  86%|████████▌ | 6/7 [00:00<00:00, 27.66it/s]Capturing CUDA graphs (FULL): 100%|██████████| 7/7 [00:00<00:00, 27.88it/s]
+(Worker_TP1 pid=870828) INFO 11-26 21:42:45 [model_runner.py:1127] Graph capturing finished in 2 secs, took 0.09 GiB
+(Worker_TP1 pid=870828) INFO 11-26 21:42:45 [gpu_worker.py:971] CUDA graph pool memory: 0.09 GiB (actual), 0.18 GiB (estimated), difference: 0.08 GiB (89.6%).
+(Worker_TP1 pid=870828) INFO 11-26 21:42:45 [gpu_worker.py:1034] Free memory on device (77.48/79.1 GiB) on startup. Desired GPU memory utilization is (0.9, 71.19 GiB). Actual usage is 7.76 GiB for consumed memory (weights + non-torch), 0.71 GiB for peak activation, and 0.09 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=67087307162` (62.48 GiB) to fit into requested memory, or `--kv-cache-memory=73848977408` (68.78 GiB) to fully utilize gpu memory. Current kv cache memory in use is 62.72 GiB.
+(Worker_TP0 pid=870827) INFO 11-26 21:42:45 [model_runner.py:1127] Graph capturing finished in 2 secs, took 0.09 GiB
+(Worker_TP0 pid=870827) INFO 11-26 21:42:45 [gpu_worker.py:971] CUDA graph pool memory: 0.09 GiB (actual), 0.18 GiB (estimated), difference: 0.08 GiB (89.6%).
+(Worker_TP0 pid=870827) INFO 11-26 21:42:45 [gpu_worker.py:1034] Free memory on device (77.48/79.1 GiB) on startup. Desired GPU memory utilization is (0.9, 71.19 GiB). Actual usage is 7.76 GiB for consumed memory (weights + non-torch), 0.71 GiB for peak activation, and 0.09 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=67087307162` (62.48 GiB) to fit into requested memory, or `--kv-cache-memory=73848977408` (68.78 GiB) to fully utilize gpu memory. Current kv cache memory in use is 62.72 GiB.
+(Worker_TP0 pid=870827) INFO 11-26 21:42:46 [jit_monitor.py:84] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+(Worker_TP1 pid=870828) INFO 11-26 21:42:46 [jit_monitor.py:84] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+(EngineCore pid=870438) INFO 11-26 21:42:46 [core.py:395] init engine (profile, create kv cache, warmup model) took 8.94 s (compilation: 0.32 s)
+(EngineCore pid=870438) INFO 11-26 21:42:47 [kernel.py:467] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native'])
+(MainProcess pid=869042) INFO 11-26 21:42:48 [hf.py:648] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+[bench    51.1s] engine ready in 40.6s
+[bench    51.3s] meta -> results/raw/h100_Qwen3-8B_tp2_profile_20261126-214156.meta.json  (kv capacity tokens: 913424)
+[bench    51.6s] warm-up done
+[bench    51.9s] B=   8 rep=0 prefill=    38.4ms tpot=   4.97ms e2e=   1329.6 tok/s
+[bench    52.5s] B=  32 rep=0 prefill=   133.9ms tpot=   6.14ms e2e=   3156.7 tok/s
+[bench    52.5s] done -> results/raw/h100_Qwen3-8B_tp2_profile_20261126-214156.csv
+Generating '/home/b14902075/vtp-store/tmp/nsys-report-86c5.qdstrm'
+[1/1] [0%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [0%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [======35%                   ] h100_tp2_profile_502937.nsys-rep[1/1] [==21%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [===24%                      ] h100_tp2_profile_502937.nsys-rep[1/1] [====27%                     ] h100_tp2_profile_502937.nsys-rep[1/1] [==20%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [=16%                        ] h100_tp2_profile_502937.nsys-rep[1/1] [=17%                        ] h100_tp2_profile_502937.nsys-rep[1/1] [==18%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [==19%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [==20%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [==21%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [===22%                      ] h100_tp2_profile_502937.nsys-rep[1/1] [==18%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [==19%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [=16%                        ] h100_tp2_profile_502937.nsys-rep[1/1] [13%                         ] h100_tp2_profile_502937.nsys-rep[1/1] [12%                         ] h100_tp2_profile_502937.nsys-rep[1/1] [11%                         ] h100_tp2_profile_502937.nsys-rep[1/1] [9%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [8%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [7%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [6%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [5%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [7%                          ] h100_tp2_profile_502937.nsys-rep[1/1] [10%                         ] h100_tp2_profile_502937.nsys-rep[1/1] [13%                         ] h100_tp2_profile_502937.nsys-rep[1/1] [=17%                        ] h100_tp2_profile_502937.nsys-rep[1/1] [==20%                       ] h100_tp2_profile_502937.nsys-rep[1/1] [===23%                      ] h100_tp2_profile_502937.nsys-rep[1/1] [====27%                     ] h100_tp2_profile_502937.nsys-rep[1/1] [=====30%                    ] h100_tp2_profile_502937.nsys-rep[1/1] [======33%                   ] h100_tp2_profile_502937.nsys-rep[1/1] [=======36%                  ] h100_tp2_profile_502937.nsys-rep[1/1] [========40%                 ] h100_tp2_profile_502937.nsys-rep[1/1] [=========43%                ] h100_tp2_profile_502937.nsys-rep[1/1] [=========46%                ] h100_tp2_profile_502937.nsys-rep[1/1] [===========50%              ] h100_tp2_profile_502937.nsys-rep[1/1] [===========53%              ] h100_tp2_profile_502937.nsys-rep[1/1] [============56%             ] h100_tp2_profile_502937.nsys-rep[1/1] [=============59%            ] h100_tp2_profile_502937.nsys-rep[1/1] [==============62%           ] h100_tp2_profile_502937.nsys-rep[1/1] [==============64%           ] h100_tp2_profile_502937.nsys-rep[1/1] [===============67%          ] h100_tp2_profile_502937.nsys-rep[1/1] [================69%         ] h100_tp2_profile_502937.nsys-rep[1/1] [================71%         ] h100_tp2_profile_502937.nsys-rep[1/1] [=================74%        ] h100_tp2_profile_502937.nsys-rep[1/1] [==================76%       ] h100_tp2_profile_502937.nsys-rep[1/1] [==================77%       ] h100_tp2_profile_502937.nsys-rep[1/1] [========================100%] h100_tp2_profile_502937.nsys-rep
+Importer error status: Importation succeeded with non-fatal errors.
+**** Analysis failed with:
+Status: TargetProfilingFailed
+Props {
+  Items {
+    Type: DeviceId
+    Value: "Local (CLI)"
+  }
+}
+Error {
+  Type: RuntimeError
+  SubError {
+    Type: ProcessEventsError
+    Props {
+      Items {
+        Type: ErrorText
+        Value: "/dvs/p4/build/sw/devtools/Agora/Rel/CUDA12.4/QuadD/Host/Analysis/Modules/TraceProcessEvent.cpp(45): Throw in function const string& {anonymous}::GetAPICallbackName(bool, bool, uint32_t, const QuadDAnalysis::MoreInjection&)\nDynamic exception type: boost::wrapexcept<QuadDCommon::InvalidArgumentException>\nstd::exception::what: InvalidArgumentException\n[QuadDCommon::tag_message*] = Unknown runtime API function index: 468\n"
+      }
+    }
+  }
+}
+Status: TargetProfilingFailed
+Props {
+  Items {
+    Type: DeviceId
+    Value: "Local (CLI)"
+  }
+}
+Error {
+  Type: RuntimeError
+  SubError {
+    Type: ProcessEventsError
+    Props {
+      Items {
+        Type: ErrorText
+        Value: "/dvs/p4/build/sw/devtools/Agora/Rel/CUDA12.4/QuadD/Host/Analysis/Modules/StringStorage.cpp(113): Throw in function QuadDCommon::StringId QuadDAnalysis::StringStorage::GetKeyForExteriorId(QuadDAnalysis::GlobalProcess, QuadDAnalysis::StringStorage::ExteriorId) const\nDynamic exception type: boost::wrapexcept<QuadDCommon::LogicException>\nstd::exception::what: LogicException\n[QuadDCommon::tag_message*] = Cannot find string for an exterior index\n"
+      }
+    }
+  }
+}
+Status: TargetProfilingFailed
+Props {
+  Items {
+    Type: DeviceId
+    Value: "Local (CLI)"
+  }
+}
+Error {
+  Type: RuntimeError
+  SubError {
+    Type: ProcessEventsError
+    Props {
+      Items {
+        Type: ErrorText
+        Value: "/dvs/p4/build/sw/devtools/Agora/Rel/CUDA12.4/QuadD/Host/Analysis/Modules/StringStorage.cpp(113): Throw in function QuadDCommon::StringId QuadDAnalysis::StringStorage::GetKeyForExteriorId(QuadDAnalysis::GlobalProcess, QuadDAnalysis::StringStorage::ExteriorId) const\nDynamic exception type: boost::wrapexcept<QuadDCommon::LogicException>\nstd::exception::what: LogicException\n[QuadDCommon::tag_message*] = Cannot find string for an exterior index\n"
+      }
+    }
+  }
+}
+
+
+**** Errors occurred while processing the raw events. ****
+**** Please see the Diagnostics Summary page after opening the report file in GUI. ****
+Generated:
+    /home/b14902075/vllm-tp-study/results/nsys/h100_tp2_profile_502937.qdstrm
+    /home/b14902075/vllm-tp-study/results/nsys/h100_tp2_profile_502937.nsys-rep
+Generating SQLite file results/nsys/h100_tp2_profile_502937.sqlite from results/nsys/h100_tp2_profile_502937.nsys-rep
+Processing [results/nsys/h100_tp2_profile_502937.sqlite] with [/work/HPC_software/LMOD/nvidia/packages/cuda-12.4/nsight-systems-2023.4.4/host-linux-x64/reports/cuda_gpu_kern_sum.py] to [results/nsys/h100_tp2_profile_502937_cuda_gpu_kern_sum.csv]... PROCESSED
+
+== exit code 0 at Thu Nov 26 21:42:56 CST 2026

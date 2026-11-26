@@ -1,0 +1,3 @@
+timestamp,platform,gpu_name,tp,model,tag,enforce_eager,disable_custom_all_reduce,batch,input_len,output_len,rep,t_prefill_s,t_e2e_s,tpot_s,e2e_out_tok_s,decode_tok_s,elapsed_job_s
+2026-11-26T19:57:52,h100,NVIDIA H100 80GB HBM3,1,Qwen3-8B,profile,0,0,8,256,32,0,0.061233,0.266130,0.006610,961.93,1210.36,53.0
+2026-11-26T19:57:53,h100,NVIDIA H100 80GB HBM3,1,Qwen3-8B,profile,0,0,32,256,32,0,0.203898,0.421145,0.007008,2431.47,4566.22,53.9

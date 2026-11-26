@@ -1,0 +1,5 @@
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+76.5,3154386,180,17524.4,17536.0,15999,18976,504.6,"void at::native::vectorized_elementwise_kernel<(int)4, at::native::FillFunctor<int>, std::array<char *, (unsigned long)1>>(int, T2, T3)"
+19.4,800067,22,36366.7,20784.0,20609,78176,26092.1,triton_
+4.0,163648,1,163648.0,163648.0,163648,163648,0.0,ncclDevKernel_AllReduce_Sum_f32_RING_LL(ncclDevKernelArgsStorage<(unsigned long)4096>)
+0.2,6401,4,1600.3,1568.0,1376,1889,226.7,"void at::native::vectorized_elementwise_kernel<(int)4, at::native::FillFunctor<float>, std::array<char *, (unsigned long)1>>(int, T2, T3)"
