@@ -68,9 +68,12 @@ case "$1" in
     [ -z "$NSYS" ] && { echo "nsys not found"; exit 1; }
     mkdir -p results/nsys
     REP="results/nsys/h100_tp${tp}_${tag}_${SLURM_JOB_ID:-x}"
+    # --wait=primary: stop when bench_tp.py exits. Without it nsys keeps waiting for
+    # vLLM's re-parented EngineCore/worker processes until `timeout` kills it (rc 124).
     timeout 270 "$NSYS" profile -o "$REP" \
         --trace=cuda,nvtx --sample=none --cpuctxsw=none \
         --trace-fork-before-exec=true --cuda-graph-trace=node --force-overwrite=true \
+        --wait=primary \
         "$PY" harness/bench_tp.py --config configs/sweep_profile.json \
         --model "$MODEL" --tp "$tp" --platform h100 --tag "$tag" "$@"
     rc=$?
